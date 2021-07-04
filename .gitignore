@@ -104,3 +104,4 @@ fabric.properties
 # Docker
 mysql/data
 
+src/main/resources/application.conf
