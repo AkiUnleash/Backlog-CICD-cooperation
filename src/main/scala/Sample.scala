@@ -17,9 +17,19 @@ object Sample extends App {
   val backlog = new BacklogClientFactory(configure).newClient
   val project = backlog.getProject(projectId)
 
+  println(backlog.getIssue("SRB-35"))
 
-    val projectIds = List(178990).asJava
-    val p =  new GetIssuesParams(projectIds)
-    val Issues =  backlog.getIssues(p)
-    println(Issues)
+
+  val projectIds = List(178990).asJava
+  val count = 100
+  val p =  new GetIssuesParams(projectIds)
+
+  p.count(count)
+  p.offset(10)
+
+  val Issues =  backlog.getIssues(p).asScala
+  Issues.foreach(i => {
+    println(i.getKeyIdAsString + " " + i.getSummary)
+  })
+
 }
