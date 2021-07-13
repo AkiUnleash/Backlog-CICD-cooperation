@@ -11,24 +11,14 @@ import java.text.SimpleDateFormat
 import java.time.{LocalDate, LocalDateTime}
 import java.util.UUID
 import java.sql.Date
+import model.abstractModel
 
 
 // DefaultJsonProtocolを継承し、JSONを返すようにする
-trait TriggerModel extends DefaultJsonProtocol {
+trait TriggerModel extends DefaultJsonProtocol with abstractModel {
   // thisに指定することで、driverを使用に。
   this: MySQLDBImpl =>
   import driver.api._
-
-  implicit object DateFormat extends JsonFormat[Date] {
-    val formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
-    def write(date: Date) = JsString(formatter.format(date))
-    def read(value: JsValue) = {
-      value match {
-        case JsString(date) => new Date(formatter.parse(date).getTime())
-        case _ => throw new DeserializationException("Expected JsString")
-      }
-    }
-  }
 
   // ClassとJSONの変換。フォーマット定義
   implicit lazy val TriggerFormat = jsonFormat10(Trigger)

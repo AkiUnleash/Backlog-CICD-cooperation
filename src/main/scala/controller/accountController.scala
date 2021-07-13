@@ -1,21 +1,21 @@
 package controller
 
 import database.MySQLDBImpl
-import model.{TriggerModel, Trigger}
+import model.{AccountModel, Account}
 
 import java.sql.Date
 import scala.concurrent.Future
 
-trait triggerController extends abstractController {
+trait accountController extends abstractController {
 
   import driver.api._
 
-  protected val TriggerTableQuery = TableQuery[TriggerTable]
+  protected val AccountTableQuery = TableQuery[AccountTable]
 
 
   // アカウント追加処理
-  def create(trigger: Trigger): Future[Int] = db.run {
-    TriggerTableAutoInc += trigger
+  def create(account: Account): Future[Int] = db.run {
+    AccountTableAutoInc += account
   }
 
 //  // アカウントからユーザー取得（E-mail指定）
@@ -40,7 +40,7 @@ trait triggerController extends abstractController {
 //    val q = for { l <- AccountTableQuery if l.uuid === uuid } yield l.deleteAt
 //    q.update(Option(currentDate))
 //  }
-//
-  def TriggerTableAutoInc =
-    TriggerTableQuery returning TriggerTableQuery.map(_.id)
+
+  def AccountTableAutoInc =
+    AccountTableQuery returning AccountTableQuery.map(_.id)
 }
