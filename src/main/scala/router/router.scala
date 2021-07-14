@@ -7,6 +7,7 @@ import akka.http.scaladsl.server._
 import controller.{accountController, triggerController}
 import org.springframework.scheduling.TriggerContext
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+
 import java.time.Clock
 import java.util.UUID.randomUUID
 import java.sql.Date
@@ -24,40 +25,55 @@ trait routes extends SprayJsonSupport
     pathPrefix("db") {
       // Register Account
       path("issues") {
-        post {
-          optionalCookie(cookieName) {
-            case Some(nameCookie) =>
-              entity(as[TriggerPost]) { trigger =>
+        pathEnd {
+          post {
+            optionalCookie(cookieName) {
+              case Some(nameCookie) =>
+                entity(as[TriggerPost]) { trigger =>
 
-                val triggerData = getByTrigger(jwtDecode(nameCookie.value),
-                  trigger.backlogIssuekey,
-                  trigger.backlogStatus)
-                val data = Await.result(triggerData, 1.second)
+                  val triggerData = getByTrigger(jwtDecode(nameCookie.value),
+                    trigger.backlogIssuekey,
+                    trigger.backlogStatus)
+                  val data = Await.result(triggerData, 1.second)
 
-                data match {
-                  case Some(uuid) =>
-                    complete("already data")
-                  case None =>
-                    val currentDate = new Date(System.currentTimeMillis())
-                    val triggerPost = Trigger(
-                      jwtDecode(nameCookie.value),
-                      trigger.backlogIssuekey,
-                      trigger.backlogStatus,
-                      trigger.circleciPipeline,
-                      trigger.circleciApikey,
-                      currentDate,
-                      null,
-                      null
-                    )
-                    complete {
-                      create(triggerPost).map { result => HttpResponse(entity = "Account has been saved successfully") }
-                    }
+                  data match {
+                    case Some(uuid) =>
+                      complete("already data")
+                    case None =>
+                      val currentDate = new Date(System.currentTimeMillis())
+                      val triggerPost = Trigger(
+                        jwtDecode(nameCookie.value),
+                        trigger.backlogIssuekey,
+                        trigger.backlogStatus,
+                        trigger.circleciPipeline,
+                        trigger.circleciApikey,
+                        currentDate,
+                        null,
+                        null
+                      )
+                      complete {
+                        create(triggerPost).map { result => HttpResponse(entity = "Account has been saved successfully") }
+                      }
+                  }
                 }
+              case None => complete("None Cookie.")
+            }
+          } ~
+            get {
+              optionalCookie(cookieName) {
+                case Some(nameCookie) =>
+                  complete(getByTriggerList(jwtDecode(nameCookie.value)))
+                case None => complete("None Cookie.")
               }
-            case None => complete("None Cookie.")
+            }
+        }
+      } ~
+        path(IntNumber) { id => {
+          delete {
+
           }
         }
-      }
+        }
     } ~
       path("login") {
         post {

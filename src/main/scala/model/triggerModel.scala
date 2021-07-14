@@ -49,6 +49,7 @@ trait TriggerModel extends DefaultJsonProtocol with abstractModel {
       excuteAt,
       deleteAt,
       id.?) <> (Trigger.tupled, Trigger.unapply)
+
   }
 }
 
