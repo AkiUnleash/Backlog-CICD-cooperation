@@ -1,12 +1,12 @@
 import akka.actor.typed.ActorSystem
 import akka.actor.typed.scaladsl.Behaviors
 import akka.http.scaladsl.Http
-import controller.triggerController
-import router.TriggerRoutes
+import controller.{triggerController, accountController}
+import router.routes
 import scala.io.StdIn
 
 
-object Server extends App with TriggerRoutes with triggerController {
+object Server extends App with routes {
 
   implicit val system = ActorSystem(Behaviors.empty, "my-system")
   implicit val executionContext = system.executionContext
