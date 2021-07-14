@@ -24,7 +24,7 @@ trait routes extends SprayJsonSupport
   val routes = {
     pathPrefix("db") {
       // Register Account
-      path("issues") {
+      pathPrefix("issues") {
         pathEnd {
           post {
             optionalCookie(cookieName) {
@@ -66,13 +66,20 @@ trait routes extends SprayJsonSupport
                 case None => complete("None Cookie.")
               }
             }
-        }
-      } ~
-        path(IntNumber) { id => {
-          delete {
-
+        } ~
+          path(IntNumber) { id => {
+            delete {
+              optionalCookie(cookieName) {
+                case Some(nameCookie) =>
+                  complete {
+                    println(nameCookie.value, id)
+                    deleteTrigger(jwtDecode(nameCookie.value), id).map { result => HttpResponse(entity = "account has been delete successfully") }
+                  }
+                case None => complete("None Cookie.")
+              }
+            }
           }
-        }
+      }
         }
     } ~
       path("login") {
