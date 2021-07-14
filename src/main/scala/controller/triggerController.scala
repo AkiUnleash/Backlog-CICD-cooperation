@@ -12,17 +12,20 @@ trait triggerController extends abstractController {
 
   protected val TriggerTableQuery = TableQuery[TriggerTable]
 
-
-  // アカウント追加処理
   def create(trigger: Trigger): Future[Int] = db.run {
     TriggerTableAutoInc += trigger
   }
 
-//  // アカウントからユーザー取得（E-mail指定）
-//  def getByUser(email: String): Future[Option[Account]] = db.run {
-//    AccountTableQuery.filter(_.email === email).result.headOption
-//  }
-//
+  def getByTrigger(uuid: String,
+                   backlogIssuekey: String,
+                   backlogStatus: String): Future[Option[Trigger]] = db.run {
+    TriggerTableQuery
+      .filter(_.uuid === uuid)
+      .filter(_.backlogIssuekey === backlogIssuekey )
+      .filter(_.backlogStatus === backlogStatus )
+      .result.headOption
+  }
+
 //  // アカウントからユーザー取得（UUID指定）
 //  def getByUserUuid(uuid: String): Future[Option[Account]] = db.run {
 //    AccountTableQuery.filter(_.uuid === uuid).result.headOption

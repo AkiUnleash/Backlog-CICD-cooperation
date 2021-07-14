@@ -21,17 +21,16 @@ trait TriggerModel extends DefaultJsonProtocol with abstractModel {
   import driver.api._
 
   // ClassとJSONの変換。フォーマット定義
-  implicit lazy val TriggerFormat = jsonFormat10(Trigger)
+  implicit lazy val TriggerFormat = jsonFormat9(Trigger)
   implicit lazy val TriggerListFormat = jsonFormat1(TriggerList)
-  implicit lazy val TriggerPostFormat = jsonFormat6(TriggerPost)
+  implicit lazy val TriggerPostFormat = jsonFormat4(TriggerPost)
 
   // テーブルスキーマの設定
   // 記述方法については以下を参照
   // http://krrrr38.github.io/slick-doc-ja/v3.0.out/%E3%82%B9%E3%82%AD%E3%83%BC%E3%83%9E.html
   class TriggerTable(tag: Tag) extends Table[Trigger](tag, "triggers") {
     val id = column[Int]("id", O.PrimaryKey, O.AutoInc)
-    val backlogSpacekey = column[String]("backlog_spacekey")
-    val backlogApikey = column[String]("backlog_apikey")
+    val uuid = column[String]("uuid")
     val backlogIssuekey = column[String]("backlog_issuekey")
     val backlogStatus = column[String]("backlog_status")
     val circleciPipeline = column[String]("circleci_pipeline")
@@ -41,8 +40,7 @@ trait TriggerModel extends DefaultJsonProtocol with abstractModel {
     val deleteAt = column[Option[Date]]("delete_at")
 
     def * = (
-      backlogSpacekey,
-      backlogApikey,
+      uuid,
       backlogIssuekey,
       backlogStatus,
       circleciPipeline,
@@ -55,8 +53,7 @@ trait TriggerModel extends DefaultJsonProtocol with abstractModel {
 }
 
 // 使用するケースクラス(データ形式)
-case class Trigger(backlogSpacekey: String,
-                   backlogApikey: String,
+case class Trigger( uuid: String,
                    backlogIssuekey: String,
                    backlogStatus: String,
                    circleciPipeline: String,
@@ -66,9 +63,7 @@ case class Trigger(backlogSpacekey: String,
                    deleteAt: Option[Date],
                    id: Option[Int] = None)
 case class TriggerList(accounts: List[Trigger])
-case class TriggerPost(backlogSpacekey: String,
-                       backlogApikey: String,
-                       backlogIssuekey: String,
+case class TriggerPost(backlogIssuekey: String,
                        backlogStatus: String,
                        circleciPipeline: String,
                        circleciApikey: String)
