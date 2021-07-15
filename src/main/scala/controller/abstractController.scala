@@ -1,9 +1,9 @@
 package controller
 
 import database.MySQLDBImpl
-import model.{AccountModel, TriggerModel}
+import model.{AccountModel, TriggerModel, WebhookModel}
 
-trait abstractController extends AccountModel with TriggerModel with MySQLDBImpl {
+trait abstractController extends AccountModel with TriggerModel with WebhookModel with MySQLDBImpl {
 
   import driver.api._
 
