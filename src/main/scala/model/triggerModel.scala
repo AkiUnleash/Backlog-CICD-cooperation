@@ -21,9 +21,9 @@ trait TriggerModel extends DefaultJsonProtocol with abstractModel {
   import driver.api._
 
   // ClassとJSONの変換。フォーマット定義
-  implicit lazy val TriggerFormat = jsonFormat9(Trigger)
+  implicit lazy val TriggerFormat = jsonFormat11(Trigger)
   implicit lazy val TriggerListFormat = jsonFormat1(TriggerList)
-  implicit lazy val TriggerPostFormat = jsonFormat4(TriggerPost)
+  implicit lazy val TriggerPostFormat = jsonFormat6(TriggerPost)
 
   // テーブルスキーマの設定
   // 記述方法については以下を参照
@@ -33,6 +33,8 @@ trait TriggerModel extends DefaultJsonProtocol with abstractModel {
     val uuid = column[String]("uuid")
     val backlogIssuekey = column[String]("backlog_issuekey")
     val backlogStatus = column[String]("backlog_status")
+    val circleciUsername = column[String]("circleci_username")
+    val circleciRepository  = column[String]("circleci_reposigory")
     val circleciPipeline = column[String]("circleci_pipeline")
     val circleciApikey = column[String]("circleci_apikey")
     val excuteAt = column[Option[Date]]("executed_at")
@@ -43,6 +45,8 @@ trait TriggerModel extends DefaultJsonProtocol with abstractModel {
       uuid,
       backlogIssuekey,
       backlogStatus,
+      circleciUsername,
+      circleciRepository,
       circleciPipeline,
       circleciApikey,
       createAt,
@@ -57,6 +61,8 @@ trait TriggerModel extends DefaultJsonProtocol with abstractModel {
 case class Trigger( uuid: String,
                    backlogIssuekey: String,
                    backlogStatus: String,
+                   circleciUsername: String,
+                   circleciRepository: String,
                    circleciPipeline: String,
                    circleciApikey: String,
                    createAt: Date,
@@ -66,5 +72,7 @@ case class Trigger( uuid: String,
 case class TriggerList(accounts: List[Trigger])
 case class TriggerPost(backlogIssuekey: String,
                        backlogStatus: String,
+                       circleciUsername: String,
+                       circleciRepository: String,
                        circleciPipeline: String,
                        circleciApikey: String)
