@@ -3,6 +3,7 @@ package model
 import spray.json.DefaultJsonProtocol
 
 trait WebhookModel extends DefaultJsonProtocol {
+  implicit lazy val SendFormat = jsonFormat1(Send)
   implicit lazy val StatusFormat = jsonFormat2(Status)
   implicit lazy val PriorityFormat = jsonFormat2(Priority)
   implicit lazy val IssueTypeFormat = jsonFormat5(IssueType)
@@ -52,3 +53,6 @@ case class Priority(
 case class Status(
                    id: Int,
                    name: String)
+
+case class Send (
+                  branch: String)

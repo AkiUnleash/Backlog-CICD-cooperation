@@ -1,5 +1,6 @@
 package router
 
+import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Directives.{entity, _}
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model._
@@ -8,40 +9,64 @@ import akka.protobufv3.internal.StringValue
 import controller.{accountController, triggerController}
 import org.springframework.scheduling.TriggerContext
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+
+import spray.json._
+import DefaultJsonProtocol._
+
 import java.time.Clock
 import java.util.UUID.randomUUID
 import java.sql.Date
 import scala.concurrent.{Await, ExecutionContextExecutor, Future}
 import scala.concurrent.duration._
-import model.{Account, AccountLogin, Trigger, TriggerPost, WebhookData}
+import model.{Account, AccountLogin, Trigger, TriggerPost, WebhookData, Send}
 import auth.{backlog, cookie, jwt}
+import http.request
+
+import scala.util.{Failure, Success}
+
 
 trait routes extends SprayJsonSupport
-  with triggerController with accountController with backlog with cookie with jwt {
+  with triggerController
+  with accountController
+  with backlog
+  with cookie
+  with jwt
+{
 
   implicit val ec: scala.concurrent.ExecutionContext = scala.concurrent.ExecutionContext.global
 
   val routes = {
-    pathPrefix("webhook") {
-      path(".+".r) { uuid => {
-        post {
-          entity(as[WebhookData]) { d =>
-            val triggerData = getByTrigger(uuid,
-              d.project.projectKey + "-" + d.content.key_id,
-              d.content.status.id.toString)
-            val data = Await.result(triggerData, 1.second)
+      pathPrefix("webhook") {
+        path(".+".r) { uuid => {
+          post {
+            entity(as[WebhookData]) { d =>
 
-            data match {
-              case Some(uuid) =>
-                complete("already data")
-              case None =>
-                complete("No data")
+              val triggerData = getByTrigger(uuid,
+                d.project.projectKey + "-" + d.content.key_id,
+                d.content.status.id.toString)
+              val data = Await.result(triggerData, 1.second)
+
+              data match {
+                case Some(uuid) =>
+                  val SendData = Send(branch = data.get.circleciPipeline)
+                  val jsonData = SendData.toJson
+
+                  request.cicdRun(jsonData,
+                    data.get.circleciUsername,
+                    data.get.circleciRepository,
+                    data.get.circleciApikey)
+
+                  exacuteTrigger(data.get.id)
+
+                  complete("already data")
+                case None =>
+                  complete("No data")
+              }
             }
           }
         }
-      }
-      }
-    } ~
+        }
+      } ~
       pathPrefix("db") {
         // Register Account
         pathPrefix("issues") {
@@ -65,6 +90,8 @@ trait routes extends SprayJsonSupport
                           jwtDecode(nameCookie.value),
                           trigger.backlogIssuekey,
                           trigger.backlogStatus,
+                          trigger.circleciUsername,
+                          trigger.circleciRepository,
                           trigger.circleciPipeline,
                           trigger.circleciApikey,
                           currentDate,
