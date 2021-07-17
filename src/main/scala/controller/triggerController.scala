@@ -1,7 +1,6 @@
 package controller
 
 import model.{TriggerModel, Trigger}
-
 import java.sql.Date
 import scala.concurrent.Future
 
@@ -22,6 +21,7 @@ trait triggerController extends abstractController {
       .filter(_.uuid === uuid)
       .filter(_.backlogIssuekey === backlogIssuekey )
       .filter(_.backlogStatus === backlogStatus )
+      .filter(_.excuteAt.isEmpty)
       .result.headOption
   }
 
@@ -32,6 +32,12 @@ trait triggerController extends abstractController {
   def deleteTrigger(uuid: String, id: Int): Future[Int] = db.run {
     val currentDate = new Date(System.currentTimeMillis())
     val q = for { l <- TriggerTableQuery if l.uuid === uuid && l.id === id } yield l.deleteAt
+    q.update(Option(currentDate))
+  }
+
+  def exacuteTrigger(id: Option[Int]): Future[Int] = db.run {
+    val currentDate = new Date(System.currentTimeMillis())
+    val q = for { l <- TriggerTableQuery if l.id === id } yield l.excuteAt
     q.update(Option(currentDate))
   }
 
