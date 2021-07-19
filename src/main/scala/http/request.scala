@@ -38,6 +38,7 @@ object request {
     ).withHeaders(
       Authorization(BasicHttpCredentials(apikey, ""))
     )
+
     )
 
     responseFuture

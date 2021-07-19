@@ -13,13 +13,10 @@ object Server extends App with routes {
 
   ddl.onComplete {
     _ =>
-      // 内部処理とPathの結合
-      val bindingFuture = Http().newServerAt("localhost", 8000).bind(routes)
+      val port = sys.env.getOrElse("PORT", "8000").toInt
+      val bindingFuture = Http().newServerAt("0.0.0.0", port).bind(routes)
 
-      println(s"Server online at http://localhost:8000/\nPress RETURN to stop...")
-      StdIn.readLine() // let it run until user presses return
-      bindingFuture
-        .flatMap(_.unbind()) // trigger unbinding from the port
-        .onComplete(_ => system.terminate()) // and shutdown when done
+      println("----- start -----")
+
   }
 }
