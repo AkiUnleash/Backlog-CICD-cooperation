@@ -105,3 +105,4 @@ fabric.properties
 mysql/data
 
 src/main/resources/application.conf
+src/main/resources/application.conf_
