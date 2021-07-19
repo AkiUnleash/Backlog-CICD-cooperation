@@ -3,7 +3,7 @@
 When you change the status of a particular issue in your Backlog, the CircleCI pipeline runs in tandem.
 
 ## demo
-
+![demo](/demo/demo.gif)
 
 
 ## Design documentations.
