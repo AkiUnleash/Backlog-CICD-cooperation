@@ -89,12 +89,11 @@ Backlogのタスクがどの状況に変わったときに、どのCircleCIを�
 
 #### /issues/:id (DELETE)
 
-ログインしているアカウントの、パスでIDを指定したデータを削除します。  
-違うログインアカウントのトリガーデータを削除することはできません。
+パスで指定したIDの、トリガーデータを削除します(ログインしたアカウントのデータに限る)。  
 
 #### /webhook/:uuid
 
-- BacklogのWebhook設定にて、このURLに指定します。 
+- BacklogのWebhook設定にて、このURLを指定します。 
 - [ :uuid ]は、[ /issues (GET) ]で表示されるUUIDを指定してください。
 - Backlog側のWebhook設定は、課題の更新時にWebhookが動作するよう指定してください。
 
