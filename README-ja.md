@@ -23,8 +23,8 @@ Backlogの特定タスクの状況を変更することで、CircleCIが連動�
 ### 手順
 
 1. [ /login ] にて、BacklogのSpaceID及びAPIキーを使いログインします。
-2. [ /issues (POST) ] にて、Backlog及びCercleCIの情報を保存してください。
-3. [ /issues (GET) ]にて 、登録されたデータのUUIDを確認してください。
+2. [ /issues (POST) ] にて、トリガーデータ（Backlog及びCircleCIの情報）を保存してください。
+3. [ /issues (GET) ]にて 、UUIDを確認してください。
 4. [ /webhook/:uuid ]を、BacklogのWebhookに指定してください。
 5. Backlog上タスクの状況を指定したトリガーと一致する更新を行うと、CircleCIが自動実行されます。
 
@@ -41,7 +41,7 @@ https://backlog-cicd-cooperation.herokuapp.com
  | /issues | GET | ログインユーザーの実行トリガーを一覧表示  |
  | /issues | POST | ログインユーザーの実行トリガーを登録  |
  | /issues/:id | DELETE | ログインユーザーの指定した実行トリガーを削除  |
- | /webhook/:uuid | POST  |  CircleCIの実行トリガー確認  |
+ | /webhook/:uuid | POST  |  CircleCIの実行トリガー  |
 
 #### /login (POST)
 
