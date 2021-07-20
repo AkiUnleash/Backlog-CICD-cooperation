@@ -7,7 +7,7 @@ When you change the status of a particular issue in your Backlog, the CircleCI p
 ![demo](/demo/demo.gif)
 
 
-## Design documentations.
+## Design documentations
 
 - [System architecture diagram](https://cacoo.com/diagrams/JbFA6UR4chm083qo/5D359?reload_rt=1625905817698_0)
 - [Sequence diagram](https://cacoo.com/diagrams/JbFA6UR4chm083qo/4E1D2?reload_rt=1625905817698_0)
@@ -20,7 +20,7 @@ When you change the status of a particular issue in your Backlog, the CircleCI p
 - Issue Circle API key（ references : [Managing API Tokens - CircleCI](https://circleci.com/docs/2.0/managing-api-tokens/) ）
 - To link Github and CircleCI.
 
-### 手順
+### Work procedure
 
 1. [ /login" ] - Login with the Backlog SpaceID and APIkey. 
 2. [ /issues (POST) ] - Save a trigger data. (Information Backlog and CircleCI)
@@ -80,7 +80,7 @@ Save the trigger data describing the execution conditions.
     "circleciApikey": "[CircleCI API key]"
 }
 ```
-| 項目 | 内容  |  例  |
+| Item | Detail  |  Example  |
 | --- | ---- | ---- |
 | backlogIssuekey    | Specify the Backlog task. ( Combine the project key and keyID with a hyphen. ) | ABC-7  |
 | backlogStatus      | Specify the status of a task by its number. | 3 |
