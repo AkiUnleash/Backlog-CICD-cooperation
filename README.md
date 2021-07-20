@@ -1,4 +1,5 @@
 # Backlog-CICD-Collaboration
+（日本語版は）
 
 When you change the status of a particular issue in your Backlog, the CircleCI pipeline runs in tandem.
 
