@@ -1,4 +1,4 @@
-# Backlog-CICD-Collaboration
+# Backlog-CICD-cooperation
 
 Backlogの特定タスクの状況を変更することで、CircleCIが連動して実行されるシステムです。  
 [English Readme is here](https://github.com/AkiUnleash/Backlog-CICD-cooperation/blob/main/README.md)
