@@ -1,4 +1,4 @@
-# Backlog-CICD-Collaboration
+# Backlog-CICD-cooperation
 [日本語版 README はこちら](https://github.com/AkiUnleash/Backlog-CICD-cooperation/blob/main/README-ja.md)
 
 When you change the status of a particular issue in your Backlog, the CircleCI pipeline runs in tandem.
@@ -11,6 +11,7 @@ When you change the status of a particular issue in your Backlog, the CircleCI p
 
 - [System architecture diagram](https://cacoo.com/diagrams/JbFA6UR4chm083qo/5D359?reload_rt=1625905817698_0)
 - [Sequence diagram](https://cacoo.com/diagrams/JbFA6UR4chm083qo/4E1D2?reload_rt=1625905817698_0)
+- [Class diagram](https://cacoo.com/diagrams/JbFA6UR4chm083qo/5B77F?reload_rt=1626841513076_0)
 - [DB-API documentations](https://docs.google.com/spreadsheets/d/1COsu1uTUe9xB2TvbY62HldaVBebx5qDsnjZVuvT1_kw/edit?usp=sharing)
 
 
@@ -101,6 +102,23 @@ Delete the trigger data for the ID specified in the URL.
 - Configure Backlog to run a webhook when an issue is updated.
 
 ## Note
+
+Setting up the development environment.  
+Add the information needed to connect to the database to [ /src/main/resources/application.conf ]
+
+```
+mysql = {
+  dataSourceClass="com.mysql.cj.jdbc.MysqlDataSource"
+  properties {
+    user="[user]"
+    password="[password]"
+    databaseName="[dbname]"
+    serverName="localhost"
+    portNumber="3306"
+  }
+  numThreads=10
+}
+```
 
 You can create a Docker image with the following command.
 
