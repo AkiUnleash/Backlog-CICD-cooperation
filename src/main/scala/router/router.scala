@@ -4,6 +4,7 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Directives.{entity, _}
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model._
+import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server._
 import akka.protobufv3.internal.StringValue
 import controller.{accountController, triggerController}
@@ -58,9 +59,12 @@ trait routes extends SprayJsonSupport
 
                   exacuteTrigger(data.get.id)
 
-                  complete("already data")
+                  complete(HttpResponse(entity = HttpEntity(ContentTypes.`application/json`,
+                    """{"message": "Success"}""")))
                 case None =>
-                  complete("No data")
+                  complete(HttpResponse(BadRequest,
+                    entity = HttpEntity(ContentTypes.`application/json`,
+                      """{"message" : "No matching data"}""")))
               }
             }
           }
@@ -83,7 +87,9 @@ trait routes extends SprayJsonSupport
 
                     data match {
                       case Some(uuid) =>
-                        complete("already data")
+                        complete(HttpResponse(BadRequest,
+                          entity = HttpEntity(ContentTypes.`application/json`,
+                            """{"message" : "Data already registered"}""")))
                       case None =>
                         val currentDate = new Date(System.currentTimeMillis())
                         val triggerPost = Trigger(
@@ -99,18 +105,27 @@ trait routes extends SprayJsonSupport
                           null
                         )
                         complete {
-                          create(triggerPost).map { result => HttpResponse(entity = "Account has been saved successfully") }
+                          create(triggerPost).map { result =>
+                            HttpResponse(entity = HttpEntity(ContentTypes.`application/json`,
+                                """{"message" : "Success"}"""))
+                          }
                         }
                     }
                   }
-                case None => complete("None Cookie.")
+                case None =>
+                  complete(HttpResponse(Unauthorized,
+                    entity = HttpEntity(ContentTypes.`application/json`,
+                      """{"message" : "Backlog authentication error"}""")))
               }
             } ~
               get {
                 optionalCookie(cookieName) {
                   case Some(nameCookie) =>
                     complete(getByTriggerList(jwtDecode(nameCookie.value)))
-                  case None => complete("None Cookie.")
+                  case None =>
+                    complete(HttpResponse(Unauthorized,
+                      entity = HttpEntity(ContentTypes.`application/json`,
+                        """{"message" : "Backlog authentication error"}""")))
                 }
               }
           } ~
@@ -120,9 +135,15 @@ trait routes extends SprayJsonSupport
                   case Some(nameCookie) =>
                     complete {
                       println(nameCookie.value, id)
-                      deleteTrigger(jwtDecode(nameCookie.value), id).map { result => HttpResponse(entity = "account has been delete successfully") }
+                      deleteTrigger(jwtDecode(nameCookie.value), id).map { result =>
+                        HttpResponse(entity = HttpEntity(ContentTypes.`application/json`,
+                          """{"message" : "Success"}"""))
+                      }
                     }
-                  case None => complete("None Cookie.")
+                  case None =>
+                    complete(HttpResponse(Unauthorized,
+                      entity = HttpEntity(ContentTypes.`application/json`,
+                        """{"message" : "Backlog authentication error"}""")))
                 }
               }
             }
@@ -137,7 +158,11 @@ trait routes extends SprayJsonSupport
             val currentDate = new Date(System.currentTimeMillis())
 
             List(authenticationFlg) match {
-              case List(false) => complete(HttpResponse(entity = "Backlog authentication error."))
+              case List(false) =>
+                complete(HttpResponse(Unauthorized,
+                  entity = HttpEntity(ContentTypes.`application/json`,
+                  """{"message" : "Backlog authentication error"}""")))
+
               case List(true) =>
                 val accountData = getByUser(accounts.backlogSpacekey)
                 val data = Await.result(accountData, 1.second)
@@ -147,12 +172,14 @@ trait routes extends SprayJsonSupport
                     val uuid = data.get.uuid
                     val token = jwtEncode(uuid)
                     settingCookie(token)
+
                   case None =>
                     val uuid = randomUUID.toString()
                     val accountPost = Account(uuid, accounts.backlogSpacekey, currentDate, null)
                     create(accountPost)
                     val token = jwtEncode(uuid)
                     settingCookie(token)
+
                 }
             }
           }

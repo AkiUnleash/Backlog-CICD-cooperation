@@ -1,6 +1,8 @@
 package auth
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse}
+import akka.http.scaladsl.model.StatusCodes.{Created, Unauthorized}
 import akka.http.scaladsl.server.Directives.{entity, _}
 import akka.http.scaladsl.model.headers.HttpCookie
 
@@ -9,13 +11,16 @@ trait cookie {
 
   def settingCookie(token: String) = {
     setCookie(HttpCookie(cookieName, value = token, httpOnly = true)) {
-      complete ("The user was logged in")
+      complete(HttpResponse(entity = HttpEntity(ContentTypes.`application/json`,
+          """{"message": "Success"}""")))
     }
   }
 
   def delCookie() = {
     deleteCookie(cookieName) {
-      complete("The user was logged out")
+      complete(HttpResponse(Created,
+        entity = HttpEntity(ContentTypes.`application/json`,
+          """{"message": "Success"}""")))
     }
   }
 }
