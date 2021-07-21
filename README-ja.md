@@ -11,6 +11,7 @@ Backlogの特定タスクの状況を変更することで、CircleCIが連動�
 
 - [システム・アーキテクチャ図](https://cacoo.com/diagrams/JbFA6UR4chm083qo/5D359?reload_rt=1625905817698_0)
 - [シーケンス図](https://cacoo.com/diagrams/JbFA6UR4chm083qo/4E1D2?reload_rt=1625905817698_0)
+- [クラス図](https://cacoo.com/diagrams/JbFA6UR4chm083qo/5B77F?reload_rt=1626841513076_0)
 - [DB-API設計書](https://docs.google.com/spreadsheets/d/1COsu1uTUe9xB2TvbY62HldaVBebx5qDsnjZVuvT1_kw/edit?usp=sharing)
 
 
@@ -98,6 +99,23 @@ Backlogのタスクがどの状況に変わったときに、どのCircleCIを�
 - Backlog側のWebhook設定は、課題の更新時にWebhookが動作するよう指定してください。
 
 ## 補足
+
+開発環境の設定について。  
+データベースと接続するために、 [ /src/main/resources/application.conf ] に必要情報を追加してください。
+
+```
+mysql = {
+  dataSourceClass="com.mysql.cj.jdbc.MysqlDataSource"
+  properties {
+    user="[user]"
+    password="[password]"
+    databaseName="[dbname]"
+    serverName="localhost"
+    portNumber="3306"
+  }
+  numThreads=10
+}
+```
 
 以下のコマンドをプロジェクトのディレクトリで実行すると、Dockerイメージ化することが出来ます。
 
