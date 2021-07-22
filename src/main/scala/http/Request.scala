@@ -19,7 +19,7 @@ import scala.concurrent.Future
 import scala.util.{Failure, Success}
 import model.Send
 
-object request {
+object Request {
 
   implicit val system = ActorSystem(Behaviors.empty, "my-system")
   implicit val executionContext = system.executionContext

@@ -7,31 +7,28 @@ import akka.http.scaladsl.model._
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server._
 import akka.protobufv3.internal.StringValue
-import controller.{accountController, triggerController}
+import controller.{AccountController, TriggerController}
 import org.springframework.scheduling.TriggerContext
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-
 import spray.json._
 import DefaultJsonProtocol._
-
 import java.time.Clock
 import java.util.UUID.randomUUID
 import java.sql.Date
 import scala.concurrent.{Await, ExecutionContextExecutor, Future}
 import scala.concurrent.duration._
 import model.{Account, AccountLogin, Trigger, TriggerPost, WebhookData, Send}
-import auth.{backlog, cookie, jwt}
-import http.request
-
+import auth.{Backlog, Cookie, Jwt}
+import http.Request
 import scala.util.{Failure, Success}
 
 
-trait routes extends SprayJsonSupport
-  with triggerController
-  with accountController
-  with backlog
-  with cookie
-  with jwt
+trait Routes extends SprayJsonSupport
+  with TriggerController
+  with AccountController
+  with Backlog
+  with Cookie
+  with Jwt
 {
 
   implicit val ec: scala.concurrent.ExecutionContext = scala.concurrent.ExecutionContext.global
@@ -52,7 +49,7 @@ trait routes extends SprayJsonSupport
                   val SendData = Send(branch = data.get.circleciPipeline)
                   val jsonData = SendData.toJson
 
-                  request.cicdRun(jsonData,
+                  Request.cicdRun(jsonData,
                     data.get.circleciUsername,
                     data.get.circleciRepository,
                     data.get.circleciApikey)
@@ -179,7 +176,6 @@ trait routes extends SprayJsonSupport
                     create(accountPost)
                     val token = jwtEncode(uuid)
                     settingCookie(token)
-
                 }
             }
           }

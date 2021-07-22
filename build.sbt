@@ -32,12 +32,12 @@ lazy val root = (project in file("."))
         "ch.qos.logback" % "logback-classic" % "1.3.0-alpha5"
       )
     },
-    defaultLinuxInstallLocation in Docker := "/opt/docker",
+    defaultLinuxInstallLocation / Docker := "/opt/docker",
     executableScriptName := "app",
     dockerBaseImage := "openjdk:11",
     dockerUpdateLatest := true,
-    mainClass in (Compile, bashScriptDefines) := Some("Server"),
-    packageName in Docker := name.value,
+    mainClass / (Compile, bashScriptDefines) := Some("Server"),
+    packageName / Docker := name.value,
     dockerCommands := dockerCommands.value.filter {
       case ExecCmd("CMD", _*) => false
       case _ => true

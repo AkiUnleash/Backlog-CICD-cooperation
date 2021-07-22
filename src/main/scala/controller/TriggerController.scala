@@ -4,7 +4,7 @@ import model.{TriggerModel, Trigger}
 import java.sql.Date
 import scala.concurrent.Future
 
-trait triggerController extends abstractController {
+trait TriggerController extends AbstractController {
 
   import driver.api._
 

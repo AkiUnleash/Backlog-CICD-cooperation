@@ -4,7 +4,7 @@ import com.nulabinc.backlog4j._
 import com.nulabinc.backlog4j.conf._
 import com.nulabinc.backlog4j.BacklogAPIError
 
-trait backlog {
+trait Backlog {
   def authentication(spaceKey: String, apiKey: String): Boolean = {
     val configure = new BacklogComConfigure(spaceKey).apiKey(apiKey)
     val backlog = new BacklogClientFactory(configure).newClient
