@@ -3,7 +3,7 @@ package controller
 import model.{AccountModel, Account}
 import scala.concurrent.Future
 
-trait accountController extends abstractController {
+trait AccountController extends AbstractController {
   import driver.api._
 
   protected val AccountTableQuery = TableQuery[AccountTable]

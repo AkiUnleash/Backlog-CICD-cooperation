@@ -11,11 +11,11 @@ import java.text.SimpleDateFormat
 import java.time.{LocalDate, LocalDateTime}
 import java.util.UUID
 import java.sql.Date
-import model.abstractModel
+import model.AbstractModel
 
 
 // DefaultJsonProtocolを継承し、JSONを返すようにする
-trait TriggerModel extends DefaultJsonProtocol with abstractModel {
+trait TriggerModel extends DefaultJsonProtocol with AbstractModel {
   // thisに指定することで、driverを使用に。
   this: MySQLDBImpl =>
   import driver.api._

@@ -6,7 +6,7 @@ import akka.http.scaladsl.model.StatusCodes.{Created, Unauthorized}
 import akka.http.scaladsl.server.Directives.{entity, _}
 import akka.http.scaladsl.model.headers.HttpCookie
 
-trait cookie {
+trait Cookie {
   val cookieName = "jwt"
 
   def settingCookie(token: String) = {

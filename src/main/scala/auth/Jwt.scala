@@ -2,7 +2,7 @@ package auth
 
 import pdi.jwt.{Jwt, JwtAlgorithm}
 
-trait jwt {
+trait Jwt {
   private val securityKey = "SIIIII"
 
   def jwtEncode(data: String): String = {
