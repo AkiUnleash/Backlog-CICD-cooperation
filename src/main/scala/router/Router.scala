@@ -18,56 +18,55 @@ import java.sql.Date
 import scala.concurrent.{Await, ExecutionContextExecutor, Future}
 import scala.concurrent.duration._
 import model.{Account, AccountLogin, Trigger, TriggerPost, WebhookData, Send}
-import auth.{Backlog, Cookie, Jwt}
+import auth.{Backlog, Cookie, JwtAuthentication}
 import http.Request
 import scala.util.{Failure, Success}
 
-
+/** Specifying the route */
 trait Routes extends SprayJsonSupport
   with TriggerController
   with AccountController
   with Backlog
   with Cookie
-  with Jwt
-{
+  with JwtAuthentication {
 
   implicit val ec: scala.concurrent.ExecutionContext = scala.concurrent.ExecutionContext.global
 
   val routes = {
-      pathPrefix("webhook") {
-        path(".+".r) { uuid => {
-          post {
-            entity(as[WebhookData]) { d =>
+    pathPrefix("webhook") {
+      path(".+".r) { uuid => {
+        post {
+          entity(as[WebhookData]) { d =>
 
-              val triggerData = getByTrigger(uuid,
-                d.project.projectKey + "-" + d.content.key_id,
-                d.content.status.id.toString)
-              val data = Await.result(triggerData, 1.second)
+            val triggerData = getByTrigger(uuid,
+              d.project.projectKey + "-" + d.content.key_id,
+              d.content.status.id.toString)
+            val data = Await.result(triggerData, 1.second)
 
-              data match {
-                case Some(uuid) =>
-                  val SendData = Send(branch = data.get.circleciPipeline)
-                  val jsonData = SendData.toJson
+            data match {
+              case Some(uuid) =>
+                val SendData = Send(branch = data.get.circleciPipeline)
+                val jsonData = SendData.toJson
 
-                  Request.cicdRun(jsonData,
-                    data.get.circleciUsername,
-                    data.get.circleciRepository,
-                    data.get.circleciApikey)
+                Request.cicdRun(jsonData,
+                  data.get.circleciUsername,
+                  data.get.circleciRepository,
+                  data.get.circleciApikey)
 
-                  exacuteTrigger(data.get.id)
+                exacuteTrigger(data.get.id)
 
-                  complete(HttpResponse(entity = HttpEntity(ContentTypes.`application/json`,
-                    """{"message": "Success"}""")))
-                case None =>
-                  complete(HttpResponse(BadRequest,
-                    entity = HttpEntity(ContentTypes.`application/json`,
-                      """{"message" : "No matching data"}""")))
-              }
+                complete(HttpResponse(entity = HttpEntity(ContentTypes.`application/json`,
+                  """{"message": "Success"}""")))
+              case None =>
+                complete(HttpResponse(BadRequest,
+                  entity = HttpEntity(ContentTypes.`application/json`,
+                    """{"message" : "No matching data"}""")))
             }
           }
         }
-        }
-      } ~
+      }
+      }
+    } ~
       pathPrefix("db") {
         // Register Account
         pathPrefix("issues") {
@@ -104,7 +103,7 @@ trait Routes extends SprayJsonSupport
                         complete {
                           create(triggerPost).map { result =>
                             HttpResponse(entity = HttpEntity(ContentTypes.`application/json`,
-                                """{"message" : "Success"}"""))
+                              """{"message" : "Success"}"""))
                           }
                         }
                     }
@@ -154,13 +153,13 @@ trait Routes extends SprayJsonSupport
             val authenticationFlg = authentication(accounts.backlogSpacekey, accounts.backlogApikey)
             val currentDate = new Date(System.currentTimeMillis())
 
-            List(authenticationFlg) match {
-              case List(false) =>
+            authenticationFlg match {
+              case false =>
                 complete(HttpResponse(Unauthorized,
                   entity = HttpEntity(ContentTypes.`application/json`,
-                  """{"message" : "Backlog authentication error"}""")))
+                    """{"message" : "Backlog authentication error"}""")))
 
-              case List(true) =>
+              case true =>
                 val accountData = getByUser(accounts.backlogSpacekey)
                 val data = Await.result(accountData, 1.second)
 
