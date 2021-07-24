@@ -115,6 +115,11 @@ mysql = {
   }
   numThreads=10
 }
+
+auth {
+    cookieName = "[Cookie name]"
+    securityKey = "[Security key]"
+}
 ```
 
 以下のコマンドをプロジェクトのディレクトリで実行すると、Dockerイメージ化することが出来ます。

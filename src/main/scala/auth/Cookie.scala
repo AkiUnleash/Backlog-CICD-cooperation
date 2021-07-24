@@ -1,15 +1,14 @@
 package auth
 
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse}
-import akka.http.scaladsl.model.StatusCodes.{Created}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.model.headers.HttpCookie
 import http.Response
-
+import com.typesafe.config.ConfigFactory
 
 /** Processing on Cookie */
 trait Cookie extends Response {
-  val cookieName = "jwt"
+  private val config = ConfigFactory.load()
+  val cookieName = config.getString("auth.cookieName")
 
   /** Storing cookies on the client.
    *
