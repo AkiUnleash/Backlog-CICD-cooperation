@@ -118,6 +118,11 @@ mysql = {
   }
   numThreads=10
 }
+
+auth {
+    cookieName = "[Cookie name]"
+    securityKey = "[Security key]"
+}
 ```
 
 You can create a Docker image with the following command.

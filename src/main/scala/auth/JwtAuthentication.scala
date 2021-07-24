@@ -1,10 +1,12 @@
 package auth
 
+import com.typesafe.config.ConfigFactory
 import pdi.jwt.{Jwt, JwtAlgorithm}
 
 /** Processing on Jwt Authentication */
 trait JwtAuthentication {
-  private val securityKey = "SIIIII"
+  private val config = ConfigFactory.load()
+  private val securityKey = config.getString("auth.securityKey")
 
   /** Encoding of Jwt.
    *

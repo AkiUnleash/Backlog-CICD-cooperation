@@ -17,6 +17,8 @@ lazy val root = (project in file("."))
       lazy val springVersion = "5.3.10.RELEASE"
       lazy val backlog4jVersion = "2.4.4"
       lazy val jwtVersion = "8.0.2"
+      lazy val logbackVersion = "1.3.0-alpha5"
+      lazy val configVersion = "1.4.1"
       Seq(
         "com.typesafe.akka" %% "akka-actor-typed" % AkkaVersion,
         "com.typesafe.akka" %% "akka-stream" % AkkaVersion,
@@ -29,20 +31,21 @@ lazy val root = (project in file("."))
         "com.github.jwt-scala" %% "jwt-core" % "8.0.2",
         "com.nulab-inc" % "backlog4j" % backlog4jVersion,
         "com.github.jwt-scala" %% "jwt-core" % jwtVersion,
-        "ch.qos.logback" % "logback-classic" % "1.3.0-alpha5"
+        "ch.qos.logback" % "logback-classic" % logbackVersion,
+        "com.typesafe" % "config" % configVersion
       )
     },
     defaultLinuxInstallLocation in Docker := "/opt/docker",
     executableScriptName := "app",
     dockerBaseImage := "openjdk:11",
     dockerUpdateLatest := true,
-    mainClass in (Compile, bashScriptDefines) := Some("Server"),
+    mainClass in(Compile, bashScriptDefines) := Some("Server"),
     packageName in Docker := name.value,
     dockerCommands := dockerCommands.value.filter {
       case ExecCmd("CMD", _*) => false
       case _ => true
     }.map {
-      case ExecCmd("ENTRYPOINT", args @ _*) => ExecCmd("CMD", args: _*)
+      case ExecCmd("ENTRYPOINT", args@_*) => ExecCmd("CMD", args: _*)
       case other => other
     }
   )
