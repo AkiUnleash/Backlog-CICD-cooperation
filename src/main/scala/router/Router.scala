@@ -125,9 +125,7 @@ trait Routes extends SprayJsonSupport
                 trigger.circleciRepository,
                 trigger.circleciPipeline,
                 trigger.circleciApikey,
-                currentDate,
-                null,
-                null
+                currentDate
               )
 
               create(triggerPost)
@@ -189,7 +187,7 @@ trait Routes extends SprayJsonSupport
 
           case None =>
             val uuid = randomUUID.toString()
-            val accountPost = Account(uuid, account.backlogSpacekey, currentDate, null)
+            val accountPost = Account(uuid, account.backlogSpacekey, currentDate)
             create(accountPost)
             val token = jwtEncode(uuid)
             settingCookie(token)

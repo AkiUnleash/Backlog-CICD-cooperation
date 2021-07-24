@@ -40,7 +40,7 @@ trait AccountModel extends DefaultJsonProtocol with AbstractModel {
 case class Account(uuid: String,
                    backlogSpacekey: String,
                    createAt: Date,
-                   deleteAt: Option[Date],
+                   deleteAt: Option[Date] = None,
                    id: Option[Int] = None)
 
 /**
