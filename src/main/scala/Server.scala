@@ -7,9 +7,7 @@ import router.Routes
  * Factory for [[Server]] instances.
  */
 object Server extends App with Routes {
-  /**
-   * Implicits conversions and helpers for [[akka.actor.typed.ActorSystem]] instances.
-   */
+
   implicit val system = ActorSystem(Behaviors.empty, "my-system")
   implicit val executionContext = system.executionContext
 
