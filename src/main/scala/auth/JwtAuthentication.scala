@@ -18,7 +18,7 @@ trait JwtAuthentication {
    *
    * @param data Original data to be decoded.
    */
-  def jwtDecode (data: String): String = {
+  def jwtDecode(data: String): String = {
     val result = Jwt.decodeRaw(data, securityKey, Seq(JwtAlgorithm.HS256))
     val s"Success($uuid)" = result.toString()
     uuid

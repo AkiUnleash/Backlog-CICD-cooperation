@@ -9,7 +9,7 @@ trait Backlog {
   /** Verify that the spaceKey and apiKye are vaild.
    *
    * @param spaceKey spacekey in Backlog (example: akiunleash)
-   * @param apiKey apiKey in Backlog (example: eiox93ox...)
+   * @param apiKey   apiKey in Backlog (example: eiox93ox...)
    */
   def authentication(spaceKey: String, apiKey: String): Boolean = {
     val configure = new BacklogComConfigure(spaceKey).apiKey(apiKey)
