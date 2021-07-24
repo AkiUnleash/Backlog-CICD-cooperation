@@ -70,8 +70,8 @@ case class Trigger(uuid: String,
                    circleciPipeline: String,
                    circleciApikey: String,
                    createAt: Date,
-                   excuteAt: Option[Date],
-                   deleteAt: Option[Date],
+                   excuteAt: Option[Date] = None,
+                   deleteAt: Option[Date] = None,
                    id: Option[Int] = None)
 
 
