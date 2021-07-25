@@ -5,6 +5,7 @@ import akka.util.ByteString
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import router.Routes
+import com.typesafe.config.ConfigFactory
 
 class ServerSpec extends AnyWordSpec with Matchers with ScalatestRouteTest with Routes {
 
@@ -12,8 +13,9 @@ class ServerSpec extends AnyWordSpec with Matchers with ScalatestRouteTest with 
     "Nomal paramater" should {
       "OK Response" in {
 
-        val spaceKey = "akiunleash"
-        val apiKey = "b8IiVPfLHVUprTDzlUEUnKw6jDusYBPqdHGsq9mwjwQ3nzQVHYmZwKP4kIgjhBhe"
+        val config = ConfigFactory.load()
+        val spaceKey = config.getString("test.nomalSpacekey")
+        val apiKey = config.getString("test.nomalApikey")
 
         val jsonRequest = ByteString(
           s"""
@@ -36,8 +38,9 @@ class ServerSpec extends AnyWordSpec with Matchers with ScalatestRouteTest with 
       "Non-nomal paramater" should {
         "Unauthorized Response" in {
 
-          val spaceKey = "none!!!"
-          val apiKey = "b8IiVPfLHVUprTDzlUEUnKw6jDusYBPqdHGsq9mwjwQ3nzQVHYmZwKP4kIgjhBhe"
+          val config = ConfigFactory.load()
+          val spaceKey = config.getString("test.nonNomalSpacekey")
+          val apiKey = config.getString("test.nonNomalApikey")
 
           val jsonRequest = ByteString(
             s"""
