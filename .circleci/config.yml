@@ -1,0 +1,48 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: openjdk:8
+    steps:
+      - checkout
+      - run:
+          name: Install sbt-extras
+          command: |
+            curl -Ls https://git.io/sbt > /usr/local/bin/sbt
+            chmod u+x /usr/local/bin/sbt
+      - run:
+          name: Make Config
+          command: |
+            mkdir -p ./src/main/resources
+            echo 'mysql = {' > ./src/main/resources/application.conf
+            echo '  dataSourceClass="'${MYSQL_DATA_SOURCE_CLASS}'"' >> ./src/main/resources/application.conf
+            echo '  properties {' >> ./src/main/resources/application.conf
+            echo '    user="'${MYSQL_USER}'"' >> ./src/main/resources/application.conf
+            echo '    password="'${MYSQL_PASSWORD}'"' >> ./src/main/resources/application.conf
+            echo '    databaseName="'${MYSQL_DATABASE_NAME}'"' >> ./src/main/resources/application.conf
+            echo '    serverName="'${MYSQL_SERVER_NAME}'"' >> ./src/main/resources/application.conf
+            echo '    portNumber="'${MYSQL_PORT_NUMBER}'"' >> ./src/main/resources/application.conf
+            echo '  }' >> ./src/main/resources/application.conf
+            echo '  numThreads='${MYSQL_NUM_THREADS} >> ./src/main/resources/application.conf
+            echo '}' >> ./src/main/resources/application.conf
+            echo '' >> ./src/main/resources/application.conf
+            echo 'auth {' >> ./src/main/resources/application.conf
+            echo '  cookieName="'${AUTH_COOKIENAME}'"' >> ./src/main/resources/application.conf
+            echo '  securityKey="'${AUTH_SECURITY_KEY}'"' >> ./src/main/resources/application.conf
+            echo '}' >> ./src/main/resources/application.conf
+            echo '' >> ./src/main/resources/application.conf
+            echo 'test {' >> ./src/main/resources/application.conf
+            echo '  nomalSpacekey="'${TEST_NOMAL_SPACE_KEY}'"' >> ./src/main/resources/application.conf
+            echo '  nomalApikey="'${TEST_NOMAL_API_KEY}'"' >> ./src/main/resources/application.conf
+            echo '  nonNomalSpacekey="'${TEST_NON_NOMAL_SPACE_KEY}'"' >> ./src/main/resources/application.conf
+            echo '  nonNomalApikey="'${TEST_NON_NOMAL_API_KEY}'"' >> ./src/main/resources/application.conf
+            echo '}' >> ./src/main/resources/application.conf
+            cat ./src/main/resources/application.conf
+      - run:
+          name: Unit Test
+          command: sbt test
+workflows:
+  workflow:
+    jobs:
+      - build
