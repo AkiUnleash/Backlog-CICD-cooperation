@@ -12,6 +12,7 @@ lazy val root = (project in file("."))
     libraryDependencies ++= {
       lazy val AkkaVersion = "2.6.8"
       lazy val AkkaHttpVersion = "10.2.4"
+      lazy val scalatestVersion = "3.2.9"
       lazy val SlickVersion = "3.3.3"
       lazy val MysqlVersion = "8.0.25"
       lazy val springVersion = "5.3.10.RELEASE"
@@ -21,9 +22,12 @@ lazy val root = (project in file("."))
       lazy val configVersion = "1.4.1"
       Seq(
         "com.typesafe.akka" %% "akka-actor-typed" % AkkaVersion,
+        "com.typesafe.akka" %% "akka-actor-testkit-typed" % AkkaVersion % Test,
         "com.typesafe.akka" %% "akka-stream" % AkkaVersion,
         "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion,
         "com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion,
+        "com.typesafe.akka" %% "akka-http-testkit" % AkkaHttpVersion,
+        "org.scalatest" %% "scalatest" % scalatestVersion % "test",
         "com.typesafe.slick" %% "slick" % SlickVersion,
         "com.typesafe.slick" %% "slick-hikaricp" % SlickVersion,
         "mysql" % "mysql-connector-java" % MysqlVersion,
