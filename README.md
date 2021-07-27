@@ -1,12 +1,12 @@
 # Backlog-CICD-cooperation
 
-[日本語版 README はこちら](https://github.com/AkiUnleash/Backlog-CICD-cooperation/blob/main/README-ja.md)
+[日本語版 README はこちら](https://nulab-exam.backlog.jp/git/YANO/app/blob/main/README-ja.md)
 
 When you change the status of a particular issue in your Backlog, the CircleCI pipeline runs in tandem.
 
 ## Demo
 
-![demo](/demo/demo.gif)
+![demo](https://nulab-exam.backlog.jp/git/YANO/app/raw/main/demo/demo.gif)
 
 ## What is Backlog-CICD-cooperation?
 

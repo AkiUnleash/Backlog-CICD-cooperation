@@ -1,12 +1,12 @@
 # Backlog-CICD-cooperation
 
-[English Readme is here](https://github.com/AkiUnleash/Backlog-CICD-cooperation/blob/main/README.md)
+[English Readme is here](https://nulab-exam.backlog.jp/git/YANO/app/blob/main/README.md)
 
 Backlogの特定タスクの状況を変更することで、CircleCIが連動して実行されるシステムです。
 
 ## デモ
 
-![demo](/demo/demo.gif)
+![demo](https://nulab-exam.backlog.jp/git/YANO/app/raw/main/demo/demo.gif)
 
 ## Backlog-CICD-cooperation って何？
 
