@@ -50,7 +50,7 @@ The details of the designation method are as follows.
 https://backlog-cicd-cooperation.herokuapp.com
 
 | URL | Method  |  Detail  |
- | --- | ---- | ---- |
+| --- | ---- | ---- |
 | /login | POST | Login with the Backlog SpaceID and APIkey  |
 | /logout | GET | Logout|
 | /issues | GET | Display the list of trigger data for logged in user. |

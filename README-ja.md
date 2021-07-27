@@ -31,8 +31,7 @@ Backlogの特定タスクの状況を変更することで、CircleCIが連動�
 
 ### 準備
 
-- BacklogのAPIキーを発行（参考：[APIの設定 – Backlog ヘルプセンター](https://support-ja.backlog.com/hc/ja/articles/360035641754-API%E3%81%AE%E8%A8%AD%E5%AE%9A)
-）
+- BacklogのAPIキーを発行（参考：[APIの設定 – Backlog ヘルプセンター](https://support-ja.backlog.com/hc/ja/articles/360035641754-API%E3%81%AE%E8%A8%AD%E5%AE%9A) ）
 - CircleCIのAPIキーを発行（参考：[API トークンの管理 – Circle CI](https://circleci.com/docs/ja/2.0/managing-api-tokens/) ）
 - GithubとCircleCIをアカウント連携させ、実行可能状態にしておく。
 
@@ -51,7 +50,7 @@ Backlogの特定タスクの状況を変更することで、CircleCIが連動�
 https://backlog-cicd-cooperation.herokuapp.com
 
 | URL | メソッド  |  内容  |
- | --- | ---- | ---- |
+| --- | ---- | ---- |
 | /login | POST | BacklogのスペースIDとAPIキーでログイン処理  |
 | /logout | GET | ログアウト処理  |
 | /issues | GET | ログインユーザーの実行トリガーを一覧表示  |
